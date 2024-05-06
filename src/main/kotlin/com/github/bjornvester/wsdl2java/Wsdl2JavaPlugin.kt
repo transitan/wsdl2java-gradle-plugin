@@ -16,7 +16,7 @@ import org.gradle.util.GradleVersion
 class Wsdl2JavaPlugin : Plugin<Project> {
     companion object {
         const val MINIMUM_GRADLE_VERSION = "7.6"
-        const val PLUGIN_ID = "com.github.bjornvester.wsdl2java"
+        const val PLUGIN_ID = "io.github.transitan.wsdl2java"
         const val WSDL2JAVA_TASK_NAME = "wsdl2java"
         const val WSDL2JAVA_EXTENSION_NAME = "wsdl2java"
         const val WSDL2JAVA_CONFIGURATION_NAME = "wsdl2java"

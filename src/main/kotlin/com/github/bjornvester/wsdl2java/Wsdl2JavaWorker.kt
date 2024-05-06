@@ -62,5 +62,12 @@ abstract class Wsdl2JavaWorker : WorkAction<Wsdl2JavaWorkerParams> {
                 it.writeText(source)
             }
         }
+        if (parameters.shouldUseLombok) {
+            parameters.outputDir.asFileTree.forEach {
+                var source = it.readText()
+                source = source.replaceFirst("public class", "@lombok.Data\n@lombok.experimental.SuperBuilder\n@lombok.AllArgsConstructor\n@lombok.NoArgsConstructor\npublic class");
+                it.writeText(source)
+            }
+        }
     }
 }

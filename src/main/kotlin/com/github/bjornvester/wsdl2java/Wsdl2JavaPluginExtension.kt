@@ -24,6 +24,7 @@ open class Wsdl2JavaPluginExtension @Inject constructor(objects: ObjectFactory, 
     override val markGenerated = objects.property(Boolean::class.java).convention(false)
     override val generatedStyle = objects.property(String::class.java).convention(GENERATED_STYLE_DEFAULT)
     override val packageName = objects.property(String::class.java)
+    override val useLombok = objects.property(Boolean::class.java).convention(true)
 
     val groups: NamedDomainObjectContainer<Wsdl2JavaPluginExtensionGroup> = objects.domainObjectContainer(Wsdl2JavaPluginExtensionGroup::class.java)
 
@@ -40,6 +41,7 @@ open class Wsdl2JavaPluginExtension @Inject constructor(objects: ObjectFactory, 
             markGenerated.convention(this@Wsdl2JavaPluginExtension.markGenerated)
             generatedStyle.convention(this@Wsdl2JavaPluginExtension.generatedStyle)
             packageName.convention(this@Wsdl2JavaPluginExtension.packageName)
+            useLombok.convention(this@Wsdl2JavaPluginExtension.useLombok)
         }
     }
 

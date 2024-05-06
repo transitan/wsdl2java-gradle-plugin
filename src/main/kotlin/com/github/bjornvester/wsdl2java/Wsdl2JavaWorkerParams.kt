@@ -8,4 +8,5 @@ interface Wsdl2JavaWorkerParams : WorkParameters {
     var outputDir: Directory
     var removeDateFromGeneratedAnnotation: Boolean
     var generatedStyle: String
+    var shouldUseLombok: Boolean
 }

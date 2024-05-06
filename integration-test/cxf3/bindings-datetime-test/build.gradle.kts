@@ -1,5 +1,5 @@
 plugins {
-    id("com.github.bjornvester.wsdl2java")
+    id("io.github.transitan.wsdl2java")
     id("com.github.bjornvester.wsdl2java.internal.java-conventions-cxf3")
 }
 

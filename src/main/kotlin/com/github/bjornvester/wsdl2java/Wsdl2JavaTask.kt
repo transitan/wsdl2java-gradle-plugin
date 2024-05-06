@@ -62,6 +62,10 @@ abstract class Wsdl2JavaTask @Inject constructor(
     @Optional
     val packageName = objects.property(String::class.java).convention(getWsdl2JavaExtension().packageName)
 
+    @get:Input
+    @Optional
+    val useLombok = objects.property(Boolean::class.java).convention(getWsdl2JavaExtension().useLombok)
+
     @get:Classpath
     val wsdl2JavaConfiguration = objects.fileCollection()
 
@@ -122,6 +126,7 @@ abstract class Wsdl2JavaTask @Inject constructor(
             outputDir = sourcesOutputDir.get()
             generatedStyle = this@Wsdl2JavaTask.generatedStyle.get()
             removeDateFromGeneratedAnnotation = (markGenerated.get() && suppressGeneratedDate.get())
+            shouldUseLombok = useLombok.get();
         }
     }
 

@@ -16,6 +16,10 @@ dependencies {
     testRuntimeOnly("org.apache.cxf:cxf-rt-transports-http-jetty")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
     testRuntimeOnly("org.slf4j:slf4j-simple:1.7.36")
+
+    compileOnly("org.projectlombok:lombok:1.18.32")
+    testImplementation("org.projectlombok:lombok:1.18.32")
+    testAnnotationProcessor("org.projectlombok:lombok:1.18.32")
 }
 
 tasks.test {

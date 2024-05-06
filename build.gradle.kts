@@ -4,8 +4,8 @@ plugins {
     id("com.gradle.plugin-publish") version "1.2.0"
 }
 
-group = "com.github.bjornvester"
-version = "2.0.2"
+group = "io.github.transitan"
+version = "1.1"
 
 repositories {
     mavenCentral()
@@ -36,24 +36,26 @@ tasks.withType<Wrapper> {
 }
 
 dependencies {
-    compileOnly("org.apache.cxf:cxf-tools-wsdlto-core:4.0.2")
-    testImplementation("commons-io:commons-io:2.13.0")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.3")
+    compileOnly("org.apache.cxf:cxf-tools-wsdlto-core:+")
+    testImplementation("commons-io:commons-io:+")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:+")
     testImplementation("org.junit.jupiter:junit-jupiter-params")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+    compileOnly("org.projectlombok:lombok:1.18.32")
+    testImplementation("org.projectlombok:lombok:1.18.32")
+    testAnnotationProcessor("org.projectlombok:lombok:1.18.32")
 }
 
 gradlePlugin {
-    website.set("https://github.com/bjornvester/wsdl2java-gradle-plugin")
-    vcsUrl.set("https://github.com/bjornvester/wsdl2java-gradle-plugin")
+    website.set("https://github.com/transitan/wsdl2java-gradle-plugin")
+    vcsUrl.set("https://github.com/transitan/wsdl2java-gradle-plugin")
     plugins {
-        create("wsdl2JavaPlugin") {
-            id = "com.github.bjornvester.wsdl2java"
-            displayName = "Gradle Wsdl2Java plugin"
+        create("wsdl2JavaLombokPlugin") {
+            id = "io.github.transitan.wsdl2java"
+            displayName = "Gradle Wsdl2Java plugin With Lombok Support"
             tags.set(listOf("wsdl2java", "cxf", "wsimport"))
             implementationClass = "com.github.bjornvester.wsdl2java.Wsdl2JavaPlugin"
-            description = "Changes:\n" +
-                    "  - Fixed missing task dependency on wsdl2java from sourcesJar"
+            description = "WSDL2 Java Plugin with Lombok support"
         }
     }
 }

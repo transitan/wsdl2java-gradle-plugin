@@ -19,4 +19,5 @@ interface Wsdl2JavaPluginExtensionGroup {
     val markGenerated: Property<Boolean>
     val generatedStyle: Property<String>
     val packageName: Property<String>
+    val useLombok: Property<Boolean>
 }

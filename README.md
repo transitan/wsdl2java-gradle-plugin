@@ -18,11 +18,11 @@ A Gradle plugin for generating Java classes from WSDL files through CXF.
 
 ## Configuration
 
-Apply the plugin ID "com.github.bjornvester.wsdl2java" as specific in the [Gradle Plugin portal page](https://plugins.gradle.org/plugin/com.github.bjornvester.wsdl2java), e.g. like this:
+Apply the plugin ID "io.github.transitan.wsdl2java" as specific in the [Gradle Plugin portal page](https://plugins.gradle.org/plugin/io.github.transitan.wsdl2java), e.g. like this:
 
 ```kotlin
 plugins {
-    id("com.github.bjornvester.wsdl2java") version "2.0.2"
+    id("io.github.transitan.wsdl2java") version "+"
 }
 ```
 
