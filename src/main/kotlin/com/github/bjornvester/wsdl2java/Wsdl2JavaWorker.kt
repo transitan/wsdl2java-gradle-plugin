@@ -64,12 +64,13 @@ abstract class Wsdl2JavaWorker : WorkAction<Wsdl2JavaWorkerParams> {
         }
         if (parameters.shouldUseLombok) {
             parameters.outputDir.asFileTree.forEach {
-                logger.debug("Using Lombok in file {}", it);
+                print("Using Lombok in file : "+it.path);
                 var source = it.readText()
                 var i = source.indexOf("public class");
                 if(i!=-1) {
                     var j = source.indexOf("{", i);
                     var className = source.substring(i + 12, j);
+                    print("check class name for : "+it.path+" : "+className);
                     if (!(className.lowercase()
                             .contains("service") && (className.contains(" extends ") || className.contains(" implements ")))
                     ) {
