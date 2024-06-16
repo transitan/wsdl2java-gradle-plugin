@@ -64,23 +64,27 @@ abstract class Wsdl2JavaWorker : WorkAction<Wsdl2JavaWorkerParams> {
         }
         if (parameters.shouldUseLombok) {
             parameters.outputDir.asFileTree.forEach {
+                logger.debug("Using Lombok in file {}", it);
                 var source = it.readText()
                 var i = source.indexOf("public class");
-                var j = source.indexOf("{", i);
-                var className = source.substring(i+12, j);
-                if (!(className.lowercase().contains("service") && (className.contains(" extends ") || className.contains(" implements "))))
-                {
-                    var withoutConstructor =
-                        "@lombok.Getter\n@lombok.Setter\n@lombok.experimental.SuperBuilder\npublic class";
-                    var withConstructor =
-                        "@lombok.Getter\n@lombok.Setter\n@lombok.experimental.SuperBuilder\n@lombok.AllArgsConstructor\n@lombok.NoArgsConstructor\npublic class";
+                if(i!=-1) {
+                    var j = source.indexOf("{", i);
+                    var className = source.substring(i + 12, j);
+                    if (!(className.lowercase()
+                            .contains("service") && (className.contains(" extends ") || className.contains(" implements ")))
+                    ) {
+                        var withoutConstructor =
+                            "@lombok.Getter\n@lombok.Setter\n@lombok.experimental.SuperBuilder\npublic class";
+                        var withConstructor =
+                            "@lombok.Getter\n@lombok.Setter\n@lombok.experimental.SuperBuilder\n@lombok.AllArgsConstructor\n@lombok.NoArgsConstructor\npublic class";
 
-                    var classHasConstructor = source.contains(className.trim() + " ()");
+                        var classHasConstructor = source.contains(className.trim() + " ()");
 
-                    source = source.replaceFirst(
-                        "public class",
-                        if (classHasConstructor) withoutConstructor else withConstructor
-                    );
+                        source = source.replaceFirst(
+                            "public class",
+                            if (classHasConstructor) withoutConstructor else withConstructor
+                        );
+                    }
                 }
                 it.writeText(source);
             }
