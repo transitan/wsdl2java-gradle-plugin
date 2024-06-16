@@ -83,7 +83,7 @@ abstract class Wsdl2JavaWorker : WorkAction<Wsdl2JavaWorkerParams> {
 
                         if(!className.contains(" extends ") && !className.contains(" implements"))
                             source = source.replaceFirst("public class", annotationWithoutConstructor);
-                        else if(className.contains(" extends " && !className.contains(" extends Exception")))
+                        else if(className.contains(" extends ") && !className.contains(" extends Exception"))
                             source = source.replaceFirst("public class", annotationWithoutConstructorSuperBuilder);
 
                     }
