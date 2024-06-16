@@ -76,12 +76,16 @@ abstract class Wsdl2JavaWorker : WorkAction<Wsdl2JavaWorkerParams> {
                     print("check class name for : "+it.path+" : "+className);
                     if (!(className.lowercase().contains("service") && (className.contains(" extends ") || className.contains(" implements ")))) {
                         var annotationWithoutConstructor = "@lombok.Getter\n@lombok.Setter\n@lombok.Builder\npublic class";
+                        var annotationWithoutConstructorSuperBuilder = "@lombok.Getter\n@lombok.Setter\n@lombok.experimental.SuperBuilder\npublic class";
                         //   var annotationWithConstructor= "@lombok.Getter\n@lombok.Setter\n@lombok.experimental.SuperBuilder\n@lombok.AllArgsConstructor\n@lombok.NoArgsConstructor\npublic class";
 
                         //   var classHasConstructor = source.substring(j).contains(actualClassName.trim() + " (");
 
                         if(!className.contains(" extends ") && !className.contains(" implements"))
                             source = source.replaceFirst("public class", annotationWithoutConstructor);
+                        else if(className.contains(" extends "))
+                            source = source.replaceFirst("public class", annotationWithoutConstructorSuperBuilder);
+                        
                     }
                 }
                 it.writeText(source);
