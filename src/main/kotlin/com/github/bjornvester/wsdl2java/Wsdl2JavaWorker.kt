@@ -64,12 +64,6 @@ abstract class Wsdl2JavaWorker : WorkAction<Wsdl2JavaWorkerParams> {
             }
         }
         if (parameters.shouldUseLombok) {
-
-            var classNames =  ArrayList<String>();
-            parameters.outputDir.asFileTree.forEach {
-                classNames.add(it.name);
-            }
-
             parameters.outputDir.asFileTree.forEach {
                 print("Using Lombok in file : "+it.path);
                 var source = it.readText()
@@ -97,11 +91,8 @@ abstract class Wsdl2JavaWorker : WorkAction<Wsdl2JavaWorkerParams> {
                         var annotationWithoutConstructorSuperBuilder = "@lombok.Getter\n@lombok.Setter\n@lombok.experimental.SuperBuilder\n" + identifier;
                         var annotationWithConstructorSuperBuilder = "@lombok.Getter\n@lombok.Setter\n@lombok.NoArgsConstructor\n@lombok.experimental.SuperBuilder\n" + identifier;
 
-
                         //   var annotationWithConstructor= "@lombok.Getter\n@lombok.Setter\n@lombok.experimental.SuperBuilder\n@lombok.AllArgsConstructor\n@lombok.NoArgsConstructor\npublic class";
-
                         var classHasConstructor = source.substring(j).contains(" " + actualClassName.trim() + "() {");
-
                         var replacement = if (classHasConstructor) annotationWithoutConstructorSuperBuilder else annotationWithConstructorSuperBuilder;
 
                         if (!className.contains(" extends ") && !className.contains(" implements"))
@@ -109,7 +100,7 @@ abstract class Wsdl2JavaWorker : WorkAction<Wsdl2JavaWorkerParams> {
                         else if (className.contains(" extends ") && !className.contains(" extends Exception"))
                             source = source.replaceFirst(identifier, replacement);
 
-                        println("check class name for : " + it.path.trim() + " : " + className + " actual class name: " + actualClassName + " has constructor :" + classHasConstructor);
+                        logger.debug("check class string : " + className + " actual class name: " + actualClassName + " has constructor :" + classHasConstructor);
                     }
                 }
                 it.writeText(source);
