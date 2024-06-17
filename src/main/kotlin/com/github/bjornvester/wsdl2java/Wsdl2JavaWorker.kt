@@ -34,10 +34,6 @@ abstract class Wsdl2JavaWorker : WorkAction<Wsdl2JavaWorkerParams> {
     private fun fixGeneratedAnnotations() {
         if (parameters.generatedStyle !=  Wsdl2JavaPluginExtension.GENERATED_STYLE_DEFAULT || parameters.removeDateFromGeneratedAnnotation) {
 
-            var classNames =  ArrayList<String>();
-            parameters.outputDir.asFileTree.forEach {
-                    classNames.add(it.name);
-            }
             parameters.outputDir.asFileTree.forEach {
                 logger.debug("Fixing the @Generated annotation in file {}", it)
                 var source = it.readText()
@@ -68,29 +64,52 @@ abstract class Wsdl2JavaWorker : WorkAction<Wsdl2JavaWorkerParams> {
             }
         }
         if (parameters.shouldUseLombok) {
+
+            var classNames =  ArrayList<String>();
+            parameters.outputDir.asFileTree.forEach {
+                classNames.add(it.name);
+            }
+
             parameters.outputDir.asFileTree.forEach {
                 print("Using Lombok in file : "+it.path);
                 var source = it.readText()
-                var i = source.indexOf("public class");
+                var identifiers =  arrayOf("public class","public abstract class","public static class");
+                var identifier = "" ;
+                var i = -1;
+                for(x in identifiers) {
+                     i = source.indexOf(x);
+                    if(i!=-1) {
+                        identifier = x; break;
+                    }
+                }
+
                 if(i!=-1) {
                     var j = source.indexOf("{", i);
-                    var className = source.substring(i + 12, j);
+                    var className = source.substring(i + identifier.length, j);
                     var actualClassName = className.trim();
                     if(actualClassName.contains(" extends ") || actualClassName.contains(" implements"))
                         actualClassName = actualClassName.substring(0, actualClassName.indexOf(' '));
-                    print("check class name for : "+it.path+" : "+className);
-                    if (!(className.lowercase().contains("service") && (className.contains(" extends ") || className.contains(" implements ")))) {
-                        var annotationWithoutConstructor = "@lombok.Getter\n@lombok.Setter\n@lombok.Builder\npublic class";
-                        var annotationWithoutConstructorSuperBuilder = "@lombok.Getter\n@lombok.Setter\n@lombok.experimental.SuperBuilder\npublic class";
+
+                    if (!(className.lowercase()
+                            .contains("service") && (className.contains(" extends ") || className.contains(" implements ")))
+                    ) {
+                        var annotationWithoutConstructor = "@lombok.Getter\n@lombok.Setter\n@lombok.Builder\n" + identifier;
+                        var annotationWithoutConstructorSuperBuilder = "@lombok.Getter\n@lombok.Setter\n@lombok.experimental.SuperBuilder\n" + identifier;
+                        var annotationWithConstructorSuperBuilder = "@lombok.Getter\n@lombok.Setter\n@lombok.NoArgsConstructor\n@lombok.experimental.SuperBuilder\n" + identifier;
+
+
                         //   var annotationWithConstructor= "@lombok.Getter\n@lombok.Setter\n@lombok.experimental.SuperBuilder\n@lombok.AllArgsConstructor\n@lombok.NoArgsConstructor\npublic class";
 
-                        //   var classHasConstructor = source.substring(j).contains(actualClassName.trim() + " (");
+                        var classHasConstructor = source.substring(j).contains(" " + actualClassName.trim() + "() {");
 
-                        if(!className.contains(" extends ") && !className.contains(" implements"))
-                            source = source.replaceFirst("public class", annotationWithoutConstructorSuperBuilder);
-                        else if(className.contains(" extends ") && !className.contains(" extends Exception"))
-                            source = source.replaceFirst("public class", annotationWithoutConstructorSuperBuilder);
+                        var replacement = if (classHasConstructor) annotationWithoutConstructorSuperBuilder else annotationWithConstructorSuperBuilder;
 
+                        if (!className.contains(" extends ") && !className.contains(" implements"))
+                            source = source.replaceFirst(identifier, replacement);
+                        else if (className.contains(" extends ") && !className.contains(" extends Exception"))
+                            source = source.replaceFirst(identifier, replacement);
+
+                        println("check class name for : " + it.path.trim() + " : " + className + " actual class name: " + actualClassName + " has constructor :" + classHasConstructor);
                     }
                 }
                 it.writeText(source);
