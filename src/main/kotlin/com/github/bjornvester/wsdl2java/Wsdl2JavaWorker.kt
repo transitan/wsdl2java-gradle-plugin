@@ -33,6 +33,11 @@ abstract class Wsdl2JavaWorker : WorkAction<Wsdl2JavaWorkerParams> {
 
     private fun fixGeneratedAnnotations() {
         if (parameters.generatedStyle !=  Wsdl2JavaPluginExtension.GENERATED_STYLE_DEFAULT || parameters.removeDateFromGeneratedAnnotation) {
+
+            var classNames =  ArrayList<String>();
+            parameters.outputDir.asFileTree.forEach {
+                    classNames.add(it.name);
+            }
             parameters.outputDir.asFileTree.forEach {
                 logger.debug("Fixing the @Generated annotation in file {}", it)
                 var source = it.readText()
@@ -82,7 +87,7 @@ abstract class Wsdl2JavaWorker : WorkAction<Wsdl2JavaWorkerParams> {
                         //   var classHasConstructor = source.substring(j).contains(actualClassName.trim() + " (");
 
                         if(!className.contains(" extends ") && !className.contains(" implements"))
-                            source = source.replaceFirst("public class", annotationWithoutConstructor);
+                            source = source.replaceFirst("public class", annotationWithoutConstructorSuperBuilder);
                         else if(className.contains(" extends ") && !className.contains(" extends Exception"))
                             source = source.replaceFirst("public class", annotationWithoutConstructorSuperBuilder);
 
