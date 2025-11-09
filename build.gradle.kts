@@ -41,9 +41,9 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:+")
     testImplementation("org.junit.jupiter:junit-jupiter-params")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
-    compileOnly("org.projectlombok:lombok:1.18.32")
-    testImplementation("org.projectlombok:lombok:1.18.32")
-    testAnnotationProcessor("org.projectlombok:lombok:1.18.32")
+    compileOnly("org.projectlombok:lombok:+")
+    testImplementation("org.projectlombok:lombok:+")
+    testAnnotationProcessor("org.projectlombok:lombok:+")
 }
 
 gradlePlugin {

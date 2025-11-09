@@ -91,13 +91,13 @@ abstract class Wsdl2JavaWorker : WorkAction<Wsdl2JavaWorkerParams> {
                         var annotationWithoutConstructorSuperBuilder = "@lombok.Getter\n@lombok.Setter\n@lombok.experimental.SuperBuilder\n" + identifier;
                         var annotationWithConstructorSuperBuilder = "@lombok.Getter\n@lombok.Setter\n@lombok.NoArgsConstructor\n@lombok.experimental.SuperBuilder\n" + identifier;
 
-                        //   var annotationWithConstructor= "@lombok.Getter\n@lombok.Setter\n@lombok.experimental.SuperBuilder\n@lombok.AllArgsConstructor\n@lombok.NoArgsConstructor\npublic class";
+                        //   var annotationWithConstructor= "@lombok.Getter\n@lombok.Setter\n@lombok.SuperBuilder\n@lombok.AllArgsConstructor\n@lombok.NoArgsConstructor\npublic class";
                         var classHasConstructor = source.substring(j).contains(" " + actualClassName.trim() + "() {");
                         var replacement = if (classHasConstructor) annotationWithoutConstructorSuperBuilder else annotationWithConstructorSuperBuilder;
 
                         if (!className.contains(" extends ") && !className.contains(" implements"))
                             source = source.replaceFirst(identifier, replacement);
-                        else if (className.contains(" extends ") && !className.contains(" extends Exception"))
+                        else if (className.contains(" extends ") && !className.contains(" extends Exception") && !className.contains(" extends java.lang.Exception"))
                             source = source.replaceFirst(identifier, replacement);
 
                         logger.debug("check class string : " + className + " actual class name: " + actualClassName + " has constructor :" + classHasConstructor);
